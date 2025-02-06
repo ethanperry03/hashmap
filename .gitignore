@@ -10,5 +10,7 @@ build/
 *.o
 *.exe
 *.out
+
+# ignoring pdf files
 *.pdf
 p1specsheet.pdf
