@@ -1,0 +1,12 @@
+# Ignore CLion-specific files
+.idea/
+cmake-build-*/
+
+# Ignore build files
+build/
+*/build/
+
+# Ignore compiled files
+*.o
+*.exe
+*.out
