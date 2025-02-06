@@ -10,3 +10,4 @@ build/
 *.o
 *.exe
 *.out
+*.pdf
