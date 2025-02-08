@@ -23,13 +23,17 @@ private:
     vector<Entry> table;
     // size of the table
     int size;
-    // counting all correct entries
+    // number of entries currently in the table
     int count;
+    // number of collisions while inserting
+    int collisions;
 
     // hash function using Knuth's constant
     int hashFunction(string);
     // linear probing method
     int probe(string, int);
+    // calculate the load factor
+    int getLoadFactor() {return (count / size);}
 public:
     // parameterized constructor
     HashTable(int);
@@ -45,6 +49,8 @@ public:
     void display();
     // load in entries from a table
     void loadEntries(string);
+    // return number of collisions
+    int getCollisions() {return collisions;}
     // is full and is empty in line defintion
     bool isEmpty () {return count == 0;}
     bool isFull () {return count == size;}

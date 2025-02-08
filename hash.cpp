@@ -1,7 +1,18 @@
 #include <iostream>
 #include <vector>
 #include "hash.h"
+#include "helper.cpp"
 using namespace std;
+
+// parameterized constructor
+HashTable::HashTable(int tableSize) {
+    count = 0;
+    collisions = 0;
+    size = tableSize;
+    table.resize(size);
+
+    cout << "Table created";
+}
 
 // hash function using Knuth's constant
 int HashTable::hashFunction(string key) {
@@ -15,11 +26,6 @@ int HashTable::probe(string key, int i) {
     return 0;
 }
 
-// parameterized constructor
-HashTable::HashTable(int tableSize) {
-    count = 0;
-    cout << "Table created";
-}
 
 
 // insertion by key
