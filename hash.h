@@ -31,20 +31,24 @@ private:
     // hash function using Knuth's constant
     int hashFunction(string);
     // linear probing method
-    int probe(string, int);
+    int probe(Entry, int);
     // calculate the load factor
     int getLoadFactor() {return (count / size);}
+    // get information to create an Entry node
+    Entry createEntry();
+    // insert a specific entry given the struct and index
+    void insertEntry(Entry&, int);
 public:
     // parameterized constructor
     HashTable(int);
     // insertion by key
-    void insert(Entry);
+    void insert();
     // find entry by its key value
-    Entry find(string);
+    int find(string);
     // remove entry by its key
     void remove(string);
     // display one entry by key
-    void display(string);
+    void display(int);
     // display all entries
     void display();
     // load in entries from a table

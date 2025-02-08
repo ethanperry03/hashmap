@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 //#include <vector>
 #include "hash.h"
 using namespace std;
@@ -7,38 +8,41 @@ void displayMenu() {
     cout << endl << "-----------MENU------------------------" << endl;
     cout << "i - Insert new key" << endl;
     cout << "l - Load entries from an input file" << endl;
-    cout << "f - Find entry by key" << endl;
     cout << "r - Remove entry by key" << endl;
-    cout << "d - Display entry by key" << endl;
+    cout << "f - Find and display entry by key" << endl;
     cout << "a - Display all entries in the table" << endl;
     cout << "c - Number of collisons so far" << endl;
     cout << "q - quit" << endl;
     cout << "---------------------------------------" << endl;
 }
 
+string getInputStr() {
+    string inputName;
+    cout << "Input first and last name of key: ";
+    getline(cin, inputName);
+    return inputName;
+}
+
 void optionHub(HashTable& table, const char input) {
     if (input == 'i') {
-        cout << "Input" << endl;
-//        table.insert("test");
+        table.insert();
     }
     else if (input == 'l') {
         cout << "load" << endl;
         table.loadEntries("load entries");
     }
-    else if (input == 'f') {
-        cout << "find" << endl;
-        table.find("testing");
-    }
     else if (input == 'r') {
-        cout << "remove" << endl;
-        table.remove("remove");
+        string inputName = getInputStr();
+        table.remove(inputName);
+    }
+    else if (input == 'f') {
+        string inputName = getInputStr();
+        int index = table.find(inputName);
+        if(index != -1) {
+            table.display(index);
+        }
     }
     else if (input == 'd') {
-        cout << "display" << endl;
-        table.display("string");
-    }
-    else if (input == 'a') {
-        cout << "all" << endl;
         table.display();
     }
     else if (input == 'c') {
@@ -52,14 +56,19 @@ void optionHub(HashTable& table, const char input) {
 
 int main() {
 
+    int tableSize = 3;
+//    cout << "Enter desired table size: ";
+//    cin >> tableSize;
+
     // table init
-    HashTable table(10);
+    HashTable table(tableSize);
 
     char input;
     do {
         displayMenu();
         cout << "-> ";
         cin >> input;
+        cin.get();
         if (input != 'q') {
             optionHub(table, input);
         }

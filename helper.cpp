@@ -1,25 +1,3 @@
-// find the next largest prime from the input number
-int findNextPrime(int);
-// test if input number is prime
-bool isPrime(int);
-
-int findNextPrime(int input) {
-    // if input is less than 2, just return 2
-    if (input <= 1) {
-        return 2;
-    }
-
-    // increment
-    int i = 0;
-    // create a loop that runs until a prime is found
-    // while input + i is not prime
-    while (!isPrime(input + i)) {
-        i++;
-    }
-    // return the next biggest prime
-    return input + i;
-}
-
 bool isPrime(int n) {
     // Check for numbers less than or equal to 1
     if (n <= 1) {
@@ -47,6 +25,23 @@ bool isPrime(int n) {
     }
     // If no factors found, n is prime
     return true;
+}
+
+int findNextPrime(int input) {
+    // if input is less than 2, just return 2
+    if (input <= 1) {
+        return 2;
+    }
+
+    // increment
+    int i = 0;
+    // create a loop that runs until a prime is found
+    // while input + i is not prime
+    while (!isPrime(input + i)) {
+        i++;
+    }
+    // return the next biggest prime
+    return input + i;
 }
 
 

@@ -1,7 +1,7 @@
 #include <iostream>
-#include <vector>
+#include <cmath>
 #include "hash.h"
-#include "helper.cpp"
+#include "helper.h"
 using namespace std;
 
 // parameterized constructor
@@ -11,46 +11,148 @@ HashTable::HashTable(int tableSize) {
     size = findNextPrime(tableSize);
     table.resize(size);
 
-    cout << "Table created";
+    cout << "Table created with size of: " << size << endl;
 }
 
 // hash function using Knuth's constant
 int HashTable::hashFunction(string key) {
-    cout << "hash function" << endl;
-    return 0;
+    int sum = 0;
+    int charCast;
+    // sum together the ascii values of all characters in the string
+    for (int i = 0; i < key.length(); i++){
+        charCast = key[i];
+        sum += charCast;
+    }
+
+    // use knuths constant (A) for multiplicative hashing method to find the slot it belongs in
+    // index = floor ( size * ( key * Amod1 ) )
+    double KNUTHS = (sqrt(5) - 1) / 2.0;
+    // grab the fractional part ([0,1])
+    double fraction = (sum * KNUTHS) - floor(sum * KNUTHS);
+    // get the index
+    int index = floor(this->size * fraction);
+
+    return index;
 }
 
 // linear probing method
-int HashTable::probe(string key, int i) {
+int HashTable::probe(Entry inputEntry, int index) {
+    if(this->isFull()) {
+        cout << "Error: table is full, no where to insert" << endl;
+        return -1;
+    }
+    // else, linear probe
+    int counter = 0;
     cout << "probing" << endl;
-    return 0;
+    while(counter < this->size) {
+        index = index % this->size;
+        // if this slot is not occupied
+        if(!this->table[index].dirtyBit) {
+            insertEntry(inputEntry, index);
+            return index;
+        }
+        counter++;
+        index++;
+        this->collisions++;
+    }
+    return index;
 }
 
+// create and return an Entry node from user input
+Entry HashTable::createEntry() {
+    Entry inputEntry;
 
+    cout << "Input first and last name: ";
+    cin >> inputEntry.name;
+//
+//    cout << "Enter phone number: ";
+//    cin >> inputEntry.phoneNum;
+//
+//    cout << "Enter Address: ";
+//    cin >> inputEntry.address;
+
+//    inputEntry.name = "Ethan Perry";
+    inputEntry.phoneNum = "123-456-7890";
+    inputEntry.address = "21 Norton Street";
+
+    return inputEntry;
+}
+
+void HashTable::insertEntry(Entry& input, int index) {
+    table[index].name = input.name;
+    table[index].phoneNum = input.phoneNum;
+    table[index].address = input.address;
+    table[index].dirtyBit = true;
+    this->count++;
+}
 
 // insertion by key
-void HashTable::insert(Entry entry) {
-
+void HashTable::insert() {
+    Entry input = createEntry();
+    int result = hashFunction(input.name);
+    // if the table is not full and the index is valid to insert
+    if (!this->isFull() && !table[result].dirtyBit) {
+        insertEntry(input, result);
+    }
+    // else if there is a collision
+    else if (table[result].dirtyBit) {
+        if (table[result].name != input.name) {
+            probe(input, result);
+        }
+        // count collision ??????????????????????????//
+        else {
+            cout << "Error in insertion: " << input.name << " already exists as a key" << endl;
+        }
+    }
+    else {
+        cout << "Error: table is full";
+    }
 }
 // find entry by its key value
-Entry HashTable::find(string key) {
-    cout << "find entry: " << key << endl;
-    Entry l;
-    return l;
+int HashTable::find(string key) {
+    int index = hashFunction(key);
+    int counter = 0;
+    // else, linear probe
+    while(counter < this->size) {
+        index = index % this->size;
+        // if this slot is not occupied
+        if(this->table[index].name == key && table[index].dirtyBit) {
+            return index;
+        }
+        counter++;
+        index++;
+    }
+    cout << "Error: " << key << " not found" << endl;
+    return -1;
 }
+
 // remove entry by its key
 void HashTable::remove(string key) {
-    cout << "remove entry: " << key << endl;
+    int index = this->find(key);
+    if(index != -1 && this->table[index].name == key) {
+        // say that it is unoccupied
+        this->table[index].dirtyBit = false;
+        this->size--;
+        cout << "Successfully removed " << key << " at index " << index << endl;
+    }
+
 }
 
 // display one entry by key
-void HashTable::display(string key) {
-    cout << "display entry: " << key << endl;
+void HashTable::display(int index) {
+    cout << "------------ " << index << " --------------" << endl;
+    cout << "Name: " << this->table[index].name << endl;
+    cout << "Phone Number: " << this->table[index].phoneNum << endl;
+    cout << "Address: " << this->table[index].address << endl;
 }
 
 // display all entries
 void HashTable::display() {
-    cout << "display aaaallllllllll" << endl;
+    for (int i = 0; i < table.size(); i++) {
+        if(table[i].dirtyBit) {
+            display(i);
+        }
+    }
 }
 
 // load in entries from a table
