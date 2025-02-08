@@ -84,6 +84,7 @@ void HashTable::insertEntry(Entry& input, int index) {
     table[index].address = input.address;
     table[index].dirtyBit = true;
     this->count++;
+    cout << input.name << " has been entered in the table at index " << index << endl;
 }
 
 // insertion by key

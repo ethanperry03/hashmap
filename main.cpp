@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-//#include <vector>
 #include "hash.h"
 using namespace std;
 
@@ -56,7 +55,7 @@ void optionHub(HashTable& table, const char input) {
 
 int main() {
 
-    int tableSize = 3;
+    int tableSize = 6;
 //    cout << "Enter desired table size: ";
 //    cin >> tableSize;
 
