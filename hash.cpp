@@ -8,7 +8,7 @@ using namespace std;
 HashTable::HashTable(int tableSize) {
     count = 0;
     collisions = 0;
-    size = tableSize;
+    size = findNextPrime(tableSize);
     table.resize(size);
 
     cout << "Table created";

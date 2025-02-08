@@ -1,9 +1,9 @@
 // find the next largest prime from the input number
-int nextPrime(int);
+int findNextPrime(int);
 // test if input number is prime
 bool isPrime(int);
 
-int nextPrime(int input) {
+int findNextPrime(int input) {
     // if input is less than 2, just return 2
     if (input <= 1) {
         return 2;
