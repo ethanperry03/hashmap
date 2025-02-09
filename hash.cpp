@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cmath>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
 #include "hash.h"
 #include "helper.h"
 using namespace std;
@@ -43,7 +46,6 @@ int HashTable::probe(Entry inputEntry, int index) {
     }
     // else, linear probe
     int counter = 0;
-    cout << "probing" << endl;
     while(counter < this->size) {
         index = index % this->size;
         // if this slot is not occupied
@@ -84,9 +86,28 @@ Entry HashTable::createEntry() {
 }
 
 void HashTable::resizeTable() {
+    // declare a new vector that will be the old table after swapping
+    vector<Entry> oldTable(this->size);
+    // swap the vectors
+    table.swap(oldTable);
     // double the size of the table, and find the next largest prime
     this->size = findNextPrime(this->size * 2);
+    // resize table
+    table.resize(this->size);
 
+
+    int newIndex;
+    // loop through the old table and hash all existing entries into new table
+    for(int i = 0; i < oldTable.size(); i++) {
+        // if the given index has a value pair
+        if(oldTable[i].dirtyBit) {
+            // get the new index (since this->size has been updated)
+            newIndex = hashFunction(oldTable[i].name);
+            // insert the new entry into the new table
+            insertEntry(oldTable[i], newIndex);
+        }
+    }
+    cout << "Table has been resized to " << this->size << endl;
 }
 
 // insert and entry to the table
@@ -96,7 +117,6 @@ void HashTable::insertEntry(Entry& input, int index) {
     table[index].address = input.address;
     table[index].dirtyBit = true;
     this->count++;
-    cout << input.name << " has been entered in the table at index " << index << endl;
 }
 
 // insertion by key
@@ -113,11 +133,13 @@ void HashTable::insert() {
     // if the index is valid to insert at that slot
     if (!table[result].dirtyBit) {
         insertEntry(input, result);
+        cout << input.name << " has been entered in the table at index " << result << endl;
     }
     // else implies there is a collision
     // if the collision is NOT a duplicate key
     else if (table[result].name != input.name) {
         probe(input, result);
+        cout << input.name << " has been entered in the table at index " << result << endl;
     }
     // else there was a collision and the key is not unqiue
     // count collision ??????????????????????????//
@@ -177,4 +199,13 @@ void HashTable::display() {
 // load in entries from a table
 void HashTable::loadEntries(string key) {
     cout << "load entries: " << key << endl;
+}
+
+void HashTable::getInfo() const {
+    cout << "------------ info ------------" << endl;
+    cout << "Num of elements: " << this->count << endl;
+    cout << "Table size: " << this->size << endl;
+    cout << "Load Factor: " << setprecision(3) << getLoadFactor() << endl;
+    cout << "Num of Collisions: " << this->collisions << endl;
+
 }

@@ -10,8 +10,7 @@ void displayMenu() {
     cout << "r - Remove entry by key" << endl;
     cout << "f - Find and display entry by key" << endl;
     cout << "a - Display all entries in the table" << endl;
-    cout << "c - Number of entries so far" << endl;
-    cout << "x - Number of collisions so far" << endl;
+    cout << "t - Get table information" << endl;
     cout << "q - quit" << endl;
     cout << "---------------------------------------" << endl;
 }
@@ -45,11 +44,8 @@ void optionHub(HashTable& table, const char input) {
     else if (input == 'd') {
         table.display();
     }
-    else if (input == 'c') {
-        cout << "Num of Entries: " << table.getCount() << endl;
-    }
-    else if (input == 'x') {
-        cout << "Collisions: " << table.getCollisions() << endl;
+    else if (input == 't') {
+        table.getInfo();
     }
     else {
         cout << "Invalid input, please try again." << endl;
