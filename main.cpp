@@ -55,7 +55,7 @@ void optionHub(HashTable& table, const char input) {
 
 int main() {
 
-    int tableSize = 6;
+    int tableSize = 3;
 //    cout << "Enter desired table size: ";
 //    cin >> tableSize;
 

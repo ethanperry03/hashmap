@@ -33,11 +33,13 @@ private:
     // linear probing method
     int probe(Entry, int);
     // calculate the load factor
-    int getLoadFactor() {return (count / size);}
+    double getLoadFactor() const;
     // get information to create an Entry node
     Entry createEntry();
     // insert a specific entry given the struct and index
     void insertEntry(Entry&, int);
+    // resize the array and rehash entries
+    void resizeTable();
 public:
     // parameterized constructor
     HashTable(int);

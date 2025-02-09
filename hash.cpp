@@ -58,6 +58,11 @@ int HashTable::probe(Entry inputEntry, int index) {
     return index;
 }
 
+// return the load factor if another element were to be inserted
+double HashTable::getLoadFactor() const {
+    return (1.0 + count) / size;
+}
+
 // create and return an Entry node from user input
 Entry HashTable::createEntry() {
     Entry inputEntry;
@@ -78,6 +83,11 @@ Entry HashTable::createEntry() {
     return inputEntry;
 }
 
+void HashTable::resizeTable() {
+    cout << "resizing the table" << endl;
+}
+
+// insert and entry to the table
 void HashTable::insertEntry(Entry& input, int index) {
     table[index].name = input.name;
     table[index].phoneNum = input.phoneNum;
@@ -89,26 +99,31 @@ void HashTable::insertEntry(Entry& input, int index) {
 
 // insertion by key
 void HashTable::insert() {
+    // create a new entry and find where it should go
     Entry input = createEntry();
     int result = hashFunction(input.name);
-    // if the table is not full and the index is valid to insert
-    if (!this->isFull() && !table[result].dirtyBit) {
+
+    // if the load factor is large, resize the table, then proceed
+    if(getLoadFactor() > 0.70) {
+        resizeTable();
+    }
+
+    // if the index is valid to insert at that slot
+    if (!table[result].dirtyBit) {
         insertEntry(input, result);
     }
-    // else if there is a collision
-    else if (table[result].dirtyBit) {
-        if (table[result].name != input.name) {
-            probe(input, result);
-        }
-        // count collision ??????????????????????????//
-        else {
-            cout << "Error in insertion: " << input.name << " already exists as a key" << endl;
-        }
+    // else implies there is a collision
+    // if the collision is NOT a duplicate key
+    else if (table[result].name != input.name) {
+        probe(input, result);
     }
+    // else there was a collision and the key is not unqiue
+    // count collision ??????????????????????????//
     else {
-        cout << "Error: table is full";
+        cout << "Error in insertion: " << input.name << " already exists as a key" << endl;
     }
 }
+
 // find entry by its key value
 int HashTable::find(string key) {
     int index = hashFunction(key);
@@ -144,7 +159,7 @@ void HashTable::display(int index) {
     cout << "------------ " << index << " --------------" << endl;
     cout << "Name: " << this->table[index].name << endl;
     cout << "Phone Number: " << this->table[index].phoneNum << endl;
-    cout << "Address: " << this->table[index].address << endl;
+    cout << "Address: " << this->table[index].address << endl << endl;
 }
 
 // display all entries
