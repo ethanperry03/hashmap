@@ -24,14 +24,16 @@ int HashTable::hashFunction(string key) {
     int charCast;
     // sum together the ascii values of all characters in the string
     for (int i = 0; i < key.length(); i++){
-        charCast = key[i];
-        sum += charCast;
+//        charCast = key[i];
+//        sum += charCast;
+        sum += key[i];
     }
 
     // use knuths constant (A) for multiplicative hashing method to find the slot it belongs in
     // index = floor ( size * ( key * Amod1 ) )
-//    double KNUTHS = (sqrt(5) - 1) / 2.0;
-    double KNUTHS = 0.618;
+    double KNUTHS = (sqrt(5) - 1) / 2.0;
+//    double KNUTHS = 0.618;
+
     // grab the fractional part ([0,1])
     double fraction = (sum * KNUTHS) - floor(sum * KNUTHS);
     // get the index
@@ -115,24 +117,25 @@ void HashTable::resizeTable() {
 
 // insert an entry given the entry struct
 void HashTable::insert(Entry& input) {
-    int result = hashFunction(input.name);
-
     // if the load factor is large, resize the table, then proceed
     if(getLoadFactor() > 0.70) {
         resizeTable();
     }
 
+    // get hash function result
+    int result = hashFunction(input.name);
+
     // if the index is valid to insert at that slot
     if (!table[result].validBit) {
         insertStruct(input, result);
         this->count++;
-//        cout << input.name << " has been entered in the table at index " << index << endl;
+//        cout << input.name << " has been entered in the table at index " << result << endl;
     }
         // else implies there is a collision
         // if the collision is NOT a duplicate key
     else if (table[result].name != input.name) {
         probe(input, result);
-//        cout << input.name << " has been entered in the table at index " << index << endl;
+//        cout << input.name << " has been entered in the table at index " << result << endl;
     }
         // else there was a collision and the key is not unqiue
         // count collision ??????????????????????????//
@@ -225,8 +228,6 @@ void HashTable::loadEntries(string inputFileName) {
     int index;
     Entry inputEntry;
     inputEntry.validBit = true;
-    // ignore the first header line
-    getline(file, inputLine);
 
     // while you are still reading valid lines from input file
     while(getline(file, inputLine)) {
