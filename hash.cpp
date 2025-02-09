@@ -79,10 +79,6 @@ Entry HashTable::createEntry() {
     cout << "Enter Address: ";
     getline(cin, inputEntry.address);
 
-//    inputEntry.name = "Ethan Perry";
-//    inputEntry.phoneNum = "123-456-7890";
-//    inputEntry.address = "21 Norton Street";
-
     return inputEntry;
 }
 
@@ -152,7 +148,6 @@ void HashTable::insertOneKey() {
     // create a new entry and find where it should go
     Entry input = createEntry();
     insert(input);
-    int index = hashFunction(input.name);
 }
 
 // find entry by its key value
@@ -183,7 +178,6 @@ void HashTable::remove(string key) {
         this->count--;
         cout << "Successfully removed " << key << " at index " << index << endl;
     }
-
 }
 
 // display one entry by key
@@ -219,7 +213,6 @@ void HashTable::loadEntries(string inputFileName) {
     }
 
     // file is valid and non empty
-    int index;
     Entry inputEntry;
     inputEntry.validBit = true;
 
@@ -245,5 +238,4 @@ void HashTable::getInfo() const {
     cout << "Table size: " << this->size << endl;
     cout << "Load Factor: " << setprecision(3) << getLoadFactor() << endl;
     cout << "Num of Collisions: " << this->collisions << endl;
-
 }

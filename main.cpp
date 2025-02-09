@@ -27,7 +27,9 @@ void optionHub(HashTable& table, const char input) {
         table.insertOneKey();
     }
     else if (input == 'l') {
-        table.loadEntries("contacts-1.csv");
+        string inputFileName;
+        getline(cin, inputFileName);
+        table.loadEntries(inputFileName);
     }
     else if (input == 'r') {
         string inputName = getInputStr();
