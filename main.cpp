@@ -10,7 +10,7 @@ void displayMenu() {
     cout << "r - Remove entry by key" << endl;
     cout << "f - Find and display entry by key" << endl;
     cout << "a - Display all entries in the table" << endl;
-    cout << "c - Number of collisons so far" << endl;
+    cout << "c - Number of collisions so far" << endl;
     cout << "q - quit" << endl;
     cout << "---------------------------------------" << endl;
 }

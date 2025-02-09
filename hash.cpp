@@ -63,13 +63,13 @@ Entry HashTable::createEntry() {
     Entry inputEntry;
 
     cout << "Input first and last name: ";
-    cin >> inputEntry.name;
+    getline(cin, inputEntry.name);
 //
 //    cout << "Enter phone number: ";
-//    cin >> inputEntry.phoneNum;
+//    getline(cin, inputEntry.phoneNum);
 //
 //    cout << "Enter Address: ";
-//    cin >> inputEntry.address;
+//    getline(cin, inputEntry.address);
 
 //    inputEntry.name = "Ethan Perry";
     inputEntry.phoneNum = "123-456-7890";
