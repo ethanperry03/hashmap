@@ -21,18 +21,14 @@ HashTable::HashTable(int tableSize) {
 // hash function using Knuth's constant
 int HashTable::hashFunction(string key) {
     int sum = 0;
-    int charCast;
     // sum together the ascii values of all characters in the string
     for (int i = 0; i < key.length(); i++){
-//        charCast = key[i];
-//        sum += charCast;
         sum += key[i];
     }
 
     // use knuths constant (A) for multiplicative hashing method to find the slot it belongs in
     // index = floor ( size * ( key * Amod1 ) )
     double KNUTHS = (sqrt(5) - 1) / 2.0;
-//    double KNUTHS = 0.618;
 
     // grab the fractional part ([0,1])
     double fraction = (sum * KNUTHS) - floor(sum * KNUTHS);
@@ -76,16 +72,16 @@ Entry HashTable::createEntry() {
 
     cout << "Input first and last name: ";
     getline(cin, inputEntry.name);
-//
-//    cout << "Enter phone number: ";
-//    getline(cin, inputEntry.phoneNum);
-//
-//    cout << "Enter Address: ";
-//    getline(cin, inputEntry.address);
+
+    cout << "Enter phone number: ";
+    getline(cin, inputEntry.phoneNum);
+
+    cout << "Enter Address: ";
+    getline(cin, inputEntry.address);
 
 //    inputEntry.name = "Ethan Perry";
-    inputEntry.phoneNum = "123-456-7890";
-    inputEntry.address = "21 Norton Street";
+//    inputEntry.phoneNum = "123-456-7890";
+//    inputEntry.address = "21 Norton Street";
 
     return inputEntry;
 }
@@ -99,7 +95,6 @@ void HashTable::resizeTable() {
     this->size = findNextPrime(this->size * 2);
     // resize table
     table.resize(this->size);
-
 
     int newIndex;
     // loop through the old table and hash all existing entries into new table
@@ -129,13 +124,13 @@ void HashTable::insert(Entry& input) {
     if (!table[result].validBit) {
         insertStruct(input, result);
         this->count++;
-//        cout << input.name << " has been entered in the table at index " << result << endl;
+        cout << input.name << " has been entered in the table at index " << result << endl;
     }
         // else implies there is a collision
         // if the collision is NOT a duplicate key
     else if (table[result].name != input.name) {
         probe(input, result);
-//        cout << input.name << " has been entered in the table at index " << result << endl;
+        cout << input.name << " has been entered in the table at index " << result << endl;
     }
         // else there was a collision and the key is not unqiue
         // count collision ??????????????????????????//
@@ -158,7 +153,6 @@ void HashTable::insertOneKey() {
     Entry input = createEntry();
     insert(input);
     int index = hashFunction(input.name);
-//    cout << input.name << " has been entered in the table at index " << index << endl;
 }
 
 // find entry by its key value
