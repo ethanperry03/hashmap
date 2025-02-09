@@ -10,7 +10,8 @@ void displayMenu() {
     cout << "r - Remove entry by key" << endl;
     cout << "f - Find and display entry by key" << endl;
     cout << "a - Display all entries in the table" << endl;
-    cout << "c - Number of collisions so far" << endl;
+    cout << "c - Number of entries so far" << endl;
+    cout << "x - Number of collisions so far" << endl;
     cout << "q - quit" << endl;
     cout << "---------------------------------------" << endl;
 }
@@ -45,6 +46,9 @@ void optionHub(HashTable& table, const char input) {
         table.display();
     }
     else if (input == 'c') {
+        cout << "Num of Entries: " << table.getCount() << endl;
+    }
+    else if (input == 'x') {
         cout << "Collisions: " << table.getCollisions() << endl;
     }
     else {
@@ -55,7 +59,7 @@ void optionHub(HashTable& table, const char input) {
 
 int main() {
 
-    int tableSize = 3;
+    int tableSize = 6;
 //    cout << "Enter desired table size: ";
 //    cin >> tableSize;
 

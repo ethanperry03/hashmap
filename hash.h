@@ -56,7 +56,9 @@ public:
     // load in entries from a table
     void loadEntries(string);
     // return number of collisions
-    int getCollisions() {return collisions;}
+    int getCollisions() const {return this->collisions;}
+    // return number of elements in the table
+    int getCount() const {return this->count;}
     // is full and is empty in line defintion
     bool isEmpty () {return count == 0;}
     bool isFull () {return count == size;}

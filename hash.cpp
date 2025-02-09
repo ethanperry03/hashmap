@@ -84,7 +84,9 @@ Entry HashTable::createEntry() {
 }
 
 void HashTable::resizeTable() {
-    cout << "resizing the table" << endl;
+    // double the size of the table, and find the next largest prime
+    this->size = findNextPrime(this->size * 2);
+
 }
 
 // insert and entry to the table
@@ -149,6 +151,7 @@ void HashTable::remove(string key) {
         // say that it is unoccupied
         this->table[index].dirtyBit = false;
         this->size--;
+        this->count--;
         cout << "Successfully removed " << key << " at index " << index << endl;
     }
 
