@@ -1,8 +1,9 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <cmath>
 #include <iomanip>
 #include <vector>
-#include <algorithm>
 #include "hash.h"
 #include "helper.h"
 using namespace std;
@@ -29,7 +30,8 @@ int HashTable::hashFunction(string key) {
 
     // use knuths constant (A) for multiplicative hashing method to find the slot it belongs in
     // index = floor ( size * ( key * Amod1 ) )
-    double KNUTHS = (sqrt(5) - 1) / 2.0;
+//    double KNUTHS = (sqrt(5) - 1) / 2.0;
+    double KNUTHS = 0.618;
     // grab the fractional part ([0,1])
     double fraction = (sum * KNUTHS) - floor(sum * KNUTHS);
     // get the index
@@ -49,8 +51,9 @@ int HashTable::probe(Entry inputEntry, int index) {
     while(counter < this->size) {
         index = index % this->size;
         // if this slot is not occupied
-        if(!this->table[index].dirtyBit) {
-            insertEntry(inputEntry, index);
+        if(!this->table[index].validBit) {
+            insertStruct(inputEntry, index);
+            this->count++;
             return index;
         }
         counter++;
@@ -100,29 +103,18 @@ void HashTable::resizeTable() {
     // loop through the old table and hash all existing entries into new table
     for(int i = 0; i < oldTable.size(); i++) {
         // if the given index has a value pair
-        if(oldTable[i].dirtyBit) {
+        if(oldTable[i].validBit) {
             // get the new index (since this->size has been updated)
             newIndex = hashFunction(oldTable[i].name);
             // insert the new entry into the new table
-            insertEntry(oldTable[i], newIndex);
+            insertStruct(oldTable[i], newIndex);
         }
     }
     cout << "Table has been resized to " << this->size << endl;
 }
 
-// insert and entry to the table
-void HashTable::insertEntry(Entry& input, int index) {
-    table[index].name = input.name;
-    table[index].phoneNum = input.phoneNum;
-    table[index].address = input.address;
-    table[index].dirtyBit = true;
-    this->count++;
-}
-
-// insertion by key
-void HashTable::insert() {
-    // create a new entry and find where it should go
-    Entry input = createEntry();
+// insert an entry given the entry struct
+void HashTable::insert(Entry& input) {
     int result = hashFunction(input.name);
 
     // if the load factor is large, resize the table, then proceed
@@ -131,21 +123,39 @@ void HashTable::insert() {
     }
 
     // if the index is valid to insert at that slot
-    if (!table[result].dirtyBit) {
-        insertEntry(input, result);
-        cout << input.name << " has been entered in the table at index " << result << endl;
+    if (!table[result].validBit) {
+        insertStruct(input, result);
+        this->count++;
+//        cout << input.name << " has been entered in the table at index " << index << endl;
     }
-    // else implies there is a collision
-    // if the collision is NOT a duplicate key
+        // else implies there is a collision
+        // if the collision is NOT a duplicate key
     else if (table[result].name != input.name) {
         probe(input, result);
-        cout << input.name << " has been entered in the table at index " << result << endl;
+//        cout << input.name << " has been entered in the table at index " << index << endl;
     }
-    // else there was a collision and the key is not unqiue
-    // count collision ??????????????????????????//
+        // else there was a collision and the key is not unqiue
+        // count collision ??????????????????????????//
     else {
         cout << "Error in insertion: " << input.name << " already exists as a key" << endl;
     }
+}
+
+// insert and entry to the table
+void HashTable::insertStruct(Entry& input, int index) {
+    table[index].name = input.name;
+    table[index].phoneNum = input.phoneNum;
+    table[index].address = input.address;
+    table[index].validBit = true;
+}
+
+// insertion by key
+void HashTable::insertOneKey() {
+    // create a new entry and find where it should go
+    Entry input = createEntry();
+    insert(input);
+    int index = hashFunction(input.name);
+//    cout << input.name << " has been entered in the table at index " << index << endl;
 }
 
 // find entry by its key value
@@ -156,7 +166,7 @@ int HashTable::find(string key) {
     while(counter < this->size) {
         index = index % this->size;
         // if this slot is not occupied
-        if(this->table[index].name == key && table[index].dirtyBit) {
+        if(this->table[index].name == key && table[index].validBit) {
             return index;
         }
         counter++;
@@ -171,7 +181,7 @@ void HashTable::remove(string key) {
     int index = this->find(key);
     if(index != -1 && this->table[index].name == key) {
         // say that it is unoccupied
-        this->table[index].dirtyBit = false;
+        this->table[index].validBit = false;
         this->size--;
         this->count--;
         cout << "Successfully removed " << key << " at index " << index << endl;
@@ -190,17 +200,50 @@ void HashTable::display(int index) {
 // display all entries
 void HashTable::display() {
     for (int i = 0; i < table.size(); i++) {
-        if(table[i].dirtyBit) {
+        if(table[i].validBit) {
             display(i);
         }
     }
 }
 
 // load in entries from a table
-void HashTable::loadEntries(string key) {
-    cout << "load entries: " << key << endl;
+void HashTable::loadEntries(string inputFileName) {
+    // check if file exists
+    ifstream file(inputFileName);
+    if(!file.is_open()) {
+        cout << "Error: '" << inputFileName << "' is an invalid file input" << endl;
+        return;
+    }
+    // check if file is empty
+    string inputLine;
+    if(!getline(file, inputLine)) {
+        cout << "Error: provided input file, '" << inputFileName << "' is empty" << endl;
+        return;
+    }
+
+    // file is valid and non empty
+    int index;
+    Entry inputEntry;
+    inputEntry.validBit = true;
+    // ignore the first header line
+    getline(file, inputLine);
+
+    // while you are still reading valid lines from input file
+    while(getline(file, inputLine)) {
+        stringstream line(inputLine);
+
+        // get each struct data member
+        getline(line, inputEntry.name, ',');
+        getline(line, inputEntry.phoneNum, ',');
+        getline(line, inputEntry.address, ',');
+
+        // insert into the table
+        insert(inputEntry);
+    }
+    cout << "Inserted batch of entries from '" << inputFileName << "'" << endl;
 }
 
+// display table information
 void HashTable::getInfo() const {
     cout << "------------ info ------------" << endl;
     cout << "Num of elements: " << this->count << endl;

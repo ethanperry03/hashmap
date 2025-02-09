@@ -14,7 +14,7 @@ struct Entry {
     string name;
     string phoneNum;
     string address;
-    bool dirtyBit;
+    bool validBit;
 };
 
 class HashTable {
@@ -36,15 +36,17 @@ private:
     double getLoadFactor() const;
     // get information to create an Entry node
     Entry createEntry();
+    // insert a given entry
+    void insert(Entry&);
     // insert a specific entry given the struct and index
-    void insertEntry(Entry&, int);
+    void insertStruct(Entry&, int);
     // resize the array and rehash entries
     void resizeTable();
 public:
     // parameterized constructor
     HashTable(int);
     // insertion by key
-    void insert();
+    void insertOneKey();
     // find entry by its key value
     int find(string);
     // remove entry by its key

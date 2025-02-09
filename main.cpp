@@ -24,11 +24,10 @@ string getInputStr() {
 
 void optionHub(HashTable& table, const char input) {
     if (input == 'i') {
-        table.insert();
+        table.insertOneKey();
     }
     else if (input == 'l') {
-        cout << "load" << endl;
-        table.loadEntries("load entries");
+        table.loadEntries("contacts-1.csv");
     }
     else if (input == 'r') {
         string inputName = getInputStr();
@@ -55,7 +54,7 @@ void optionHub(HashTable& table, const char input) {
 
 int main() {
 
-    int tableSize = 6;
+    int tableSize = 3;
 //    cout << "Enter desired table size: ";
 //    cin >> tableSize;
 
