@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <limits>
 #include "hash.h"
 using namespace std;
 
@@ -89,9 +90,16 @@ void optionHub(HashTable& table, const char input) {
  */
 int main() {
 
-    int tableSize = 3;
+    int tableSize;
     cout << "Enter desired table size: ";
-    cin >> tableSize;
+
+    while (!(cin >> tableSize)) {
+        // Clear the error state of cin
+        cin.clear();
+        // Ignore the rest of the input line
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input. Please enter a number: ";
+    }
 
     // table init
     HashTable table(tableSize);
