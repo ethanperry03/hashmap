@@ -60,8 +60,8 @@ public:
     // display information about the table
     void getInfo() const;
     // is full and is empty in line defintion
-    bool isEmpty () {return count == 0;}
-    bool isFull () {return count == size;}
+    bool isEmpty () const {return count == 0;}
+    bool isFull () const {return count == size;}
 };
 
 

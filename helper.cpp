@@ -1,3 +1,14 @@
+#include "helper.h"
+using namespace std;
+
+/** isPrime()
+ * This function checks if the input number `n` is a prime number. It uses a series of
+ * conditional checks and an optimized loop to eliminate non-prime numbers efficiently.
+ * The function returns true if `n` is prime and false otherwise.
+ *
+ * @param n The number to be checked for primality.
+ * @return bool True if the number is prime, false otherwise.
+ */
 bool isPrime(int n) {
     // Check for numbers less than or equal to 1
     if (n <= 1) {
@@ -27,6 +38,14 @@ bool isPrime(int n) {
     return true;
 }
 
+/** findNextPrime()
+ * This function checks if the input value is less than 2 and returns 2 as the next prime.
+ * If the input is greater than 1, it increments the value until a prime number is found.
+ * The function returns the next largest prime number greater than or equal to the input value.
+ *
+ * @param input The starting value to find the next prime number.
+ * @return int The next prime number greater than or equal to the input value.
+ */
 int findNextPrime(int input) {
     // if input is less than 2, just return 2
     if (input <= 1) {
@@ -43,5 +62,3 @@ int findNextPrime(int input) {
     // return the next biggest prime
     return input + i;
 }
-
-
