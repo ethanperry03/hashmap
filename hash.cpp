@@ -161,7 +161,7 @@ void HashTable::resizeTable() {
  * @param input The entry structure to be inserted into the hash table.
  * @return void This function does not return a value.
  */
-void HashTable::insert(Entry& input) {
+bool HashTable::insert(Entry& input) {
     // if the load factor is large, resize the table, then proceed
     if(getLoadFactor() > 0.70) {
         resizeTable();
@@ -169,24 +169,24 @@ void HashTable::insert(Entry& input) {
 
     // get hash function result
     int result = hashFunction(input.name);
-
+    int index;
     // if the index is valid to insert at that slot
     if (!table[result].validBit) {
         insertStruct(input, result);
         this->count++;
-        cout << input.name << " has been entered in the table at index " << result << endl;
+        index = result;
     }
-        // else implies there is a collision
-        // if the collision is NOT a duplicate key
+    // else implies there is a collision
+    // if the collision is NOT a duplicate key
     else if (table[result].name != input.name) {
-        probe(input, result);
-        cout << input.name << " has been entered in the table at index " << result << endl;
+        index = probe(input, result);
     }
-        // else there was a collision and the key is not unqiue
-        // count collision ??????????????????????????//
+    // else there was a collision and the key is not unqiue
+    // count collision ??????????????????????????//
     else {
-        cout << "Error in insertion: " << input.name << " already exists as a key" << endl;
+        index = -1;
     }
+    return index;
 }
 
 /** insertStruct() - HashTable class
@@ -215,7 +215,13 @@ void HashTable::insertStruct(Entry& input, int index) {
 void HashTable::insertOneKey() {
     // create a new entry and find where it should go
     Entry input = createEntry();
-    insert(input);
+    int index = insert(input);
+    if(index != -1) {
+        cout << input.name << " has been entered in the table at index " << index << endl;
+    }
+    else {
+        cout << "Error in insertion: " << input.name << " already exists as a key" << endl;
+    }
 }
 
 /** find() - HashTable class
@@ -321,6 +327,7 @@ void HashTable::loadEntries(string inputFileName) {
     Entry inputEntry;
     inputEntry.validBit = true;
 
+    int countBeforeFile = this->count;
     // while you are still reading valid lines from input file
     while(getline(file, inputLine)) {
         stringstream line(inputLine);
@@ -333,7 +340,7 @@ void HashTable::loadEntries(string inputFileName) {
         // insert into the table
         insert(inputEntry);
     }
-    cout << "Inserted batch of entries from '" << inputFileName << "'" << endl;
+    cout << "Inserted " << this->count - countBeforeFile << " entries from '" << inputFileName << "'" << endl;
 }
 
 /** getInfo() - HashTable class
