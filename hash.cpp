@@ -161,7 +161,7 @@ void HashTable::resizeTable() {
  * @param input The entry structure to be inserted into the hash table.
  * @return void This function does not return a value.
  */
-bool HashTable::insert(Entry& input) {
+int HashTable::insert(Entry& input) {
     // if the load factor is large, resize the table, then proceed
     if(getLoadFactor() > 0.70) {
         resizeTable();
@@ -216,6 +216,7 @@ void HashTable::insertOneKey() {
     // create a new entry and find where it should go
     Entry input = createEntry();
     int index = insert(input);
+
     if(index != -1) {
         cout << input.name << " has been entered in the table at index " << index << endl;
     }
@@ -357,4 +358,5 @@ void HashTable::getInfo() const {
     cout << "Table size: " << this->size << endl;
     cout << "Load Factor: " << setprecision(3) << getLoadFactor() << endl;
     cout << "Num of Collisions: " << this->collisions << endl;
+    cout << "Average Insert: " << setprecision(2) << (double)this->collisions / this->count << endl;
 }

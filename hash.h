@@ -37,7 +37,7 @@ private:
     // get information to create an Entry node
     Entry createEntry();
     // insert a given entry
-    bool insert(Entry&);
+    int insert(Entry&);
     // insert a specific entry given the struct and index
     void insertStruct(Entry&, int);
     // resize the array and rehash entries
