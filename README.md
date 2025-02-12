@@ -1,13 +1,13 @@
 ## To do 
 - linear probing change(?)
 - dependencies of functions
-- const
+- const and passing reference but const
 - header comment in main?
 
 # Hash Table Implementation using Open Addressing in C++
 
-## Authors
-- Ethan Perry
+## Author 
+Ethan Perry
 
 ## Description
 This project involves implementing a hash table using open addressing with linear probing in C++. The goal is to achieve 

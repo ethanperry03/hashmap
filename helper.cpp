@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <limits>
 #include "helper.h"
@@ -66,6 +65,15 @@ int findNextPrime(int input) {
     return input + i;
 }
 
+/**
+ * @brief Prompts the user for an integer input, ensuring valid and positive input.
+ *
+ * This function reads an integer input from the user. It repeatedly prompts the
+ * user until a valid integer is entered. If the input is negative, it restarts
+ * the prompt for a positive integer.
+ *
+ * @return int The valid, positive integer input from the user.
+ */
 int getIntInput() {
     int input;
     while (!(cin >> input)) {

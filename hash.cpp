@@ -8,7 +8,16 @@
 #include "helper.h"
 using namespace std;
 
-// parameterized constructor
+/**
+ * @brief Constructs a HashTable with a specified initial size.
+ *
+ * This constructor initializes the hash table with an initial size, which is
+ * adjusted to the next prime number for better distribution of keys. It also
+ * initializes the count and collision counters to zero, and sets the default
+ * probing method to linear probing (probeExpo = 1).
+ *
+ * @param tableSize The initial size of the hash table.
+ */
 HashTable::HashTable(int tableSize) {
     count = 0;
     collisions = 0;
@@ -29,11 +38,11 @@ HashTable::HashTable(int tableSize) {
  * @param key The string key for which the hash index is to be computed.
  * @return int The computed hash index, which is an integer within the range [0, size - 1].
  */
-int HashTable::hashFunction(string key) {
+int HashTable::hashFunction(const string& key) const {
     int sum = 0;
     // sum together the ascii values of all characters in the string
-    for (int i = 0; i < key.length(); i++){
-        sum += key[i];
+    for (char i : key){
+        sum += i;
     }
 
     // use knuths constant (A) for multiplicative hashing method to find the slot it belongs in
@@ -237,7 +246,7 @@ void HashTable::insertOneKey() {
  * @param key The key value to search for in the hash table.
  * @return int The index of the entry if found, or -1 if the entry is not found.
  */
-int HashTable::find(string key) {
+int HashTable::find(const string& key) const {
     int index = hashFunction(key);
     int counter = 0;
     // else, linear probe
@@ -263,7 +272,7 @@ int HashTable::find(string key) {
  * @param key The key value of the entry to be removed from the hash table.
  * @return void This function does not return a value.
  */
-void HashTable::remove(string key) {
+void HashTable::remove(const string& key) {
     int index = this->find(key);
     if(index != -1 && this->table[index].name == key) {
         // say that it is unoccupied
@@ -281,7 +290,7 @@ void HashTable::remove(string key) {
  * @param index The index of the entry to be displayed.
  * @return void This function does not return a value.
  */
-void HashTable::display(int index) {
+void HashTable::display(const int& index) const {
     cout << "------------ " << index << " --------------" << endl;
     cout << "Name: " << this->table[index].name << endl;
     cout << "Phone Number: " << this->table[index].phoneNum << endl;
@@ -295,7 +304,7 @@ void HashTable::display(int index) {
  *
  * @return void This function does not return a value.
  */
-void HashTable::display() {
+void HashTable::display() const {
     for (int i = 0; i < table.size(); i++) {
         if(table[i].validBit) {
             display(i);
@@ -312,7 +321,7 @@ void HashTable::display() {
  * @param inputFileName The name of the input file containing entries to be loaded.
  * @return void This function does not return a value.
  */
-void HashTable::loadEntries(string inputFileName) {
+void HashTable::loadEntries(const string& inputFileName) {
     // check if file exists
     ifstream file(inputFileName);
     if(!file.is_open()) {
@@ -363,6 +372,15 @@ void HashTable::getInfo() const {
     cout << "Average Collisions Before Insert: " << setprecision(2) << (double)this->collisions / this->count << endl;
 }
 
+/**
+ * @brief Changes the probing method used by the hash table.
+ *
+ * This function displays a menu to the user for selecting the probing method:
+ * 1. Linear Probing (index^1)
+ * 2. Quadratic Probing (index^2)
+ * 3. Custom Probing with any integer exponent k (i^k)
+ * The selected probing method is then stored in the class member variable 'probeExpo'.
+ */
 void HashTable::changeProbe() {
     cout << "----------------" << endl;
     cout << "1 - linear probing" << endl;

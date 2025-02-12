@@ -9,7 +9,7 @@
 int findNextPrime(int);
 // test if input number is prime
 bool isPrime(int);
-
+// input loop to get a positive integer and continue loop if not
 int getIntInput();
 
 #endif //P1_HELPER_H

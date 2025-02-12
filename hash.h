@@ -27,17 +27,17 @@ private:
     int count;
     // number of collisions while inserting
     int collisions;
-
+    // exponent for probing method
     int probeExpo;
 
     // hash function using Knuth's constant
-    int hashFunction(string);
+    int hashFunction(const string&) const;
     // linear probing method
     int probe(Entry, int);
     // calculate the load factor
     double getLoadFactor() const;
     // get information to create an Entry node
-    Entry createEntry();
+    static Entry createEntry();
     // insert a given entry
     int insert(Entry&);
     // insert a specific entry given the struct and index
@@ -46,25 +46,24 @@ private:
     void resizeTable();
 public:
     // parameterized constructor
-    HashTable(int);
+    explicit HashTable(int);
     // insertion by key
     void insertOneKey();
     // find entry by its key value
-    int find(string);
+    int find(const string&) const;
     // remove entry by its key
-    void remove(string);
+    void remove(const string&);
     // display one entry by key
-    void display(int);
+    void display(const int&) const;
     // display all entries
-    void display();
+    void display() const;
     // load in entries from a table
-    void loadEntries(string);
+    void loadEntries(const string&);
     // display information about the table
     void getInfo() const;
     // change the probing method
     void changeProbe();
-    // is full and is empty in line defintion
-    bool isEmpty () const {return count == 0;}
+    // is full in line defintion
     bool isFull () const {return count == size;}
 };
 
