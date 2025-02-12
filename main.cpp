@@ -2,6 +2,7 @@
 #include <string>
 #include <limits>
 #include "hash.h"
+#include "helper.h"
 using namespace std;
 
 /** displayMenu()
@@ -19,6 +20,7 @@ void displayMenu() {
     cout << "f - Find and display entry by key" << endl;
     cout << "a - Display all entries in the table" << endl;
     cout << "t - Get table information" << endl;
+    cout << "p - Change probing exponent" << endl;
     cout << "q - quit" << endl;
     cout << "---------------------------------------" << endl;
 }
@@ -74,6 +76,9 @@ void optionHub(HashTable& table, const char input) {
     else if (input == 't') {
         table.getInfo();
     }
+    else if (input == 'p') {
+        table.changeProbe();
+    }
     else {
         cout << "Invalid input, please try again." << endl;
     }
@@ -92,14 +97,7 @@ int main() {
 
     int tableSize;
     cout << "Enter desired table size: ";
-
-    while (!(cin >> tableSize)) {
-        // Clear the error state of cin
-        cin.clear();
-        // Ignore the rest of the input line
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input. Please enter a number: ";
-    }
+    tableSize = getIntInput();
 
     // table init
     HashTable table(tableSize);

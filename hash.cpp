@@ -12,6 +12,7 @@ using namespace std;
 HashTable::HashTable(int tableSize) {
     count = 0;
     collisions = 0;
+    probeExpo = 1;
     size = findNextPrime(tableSize);
     table.resize(size);
 
@@ -73,6 +74,7 @@ int HashTable::probe(Entry inputEntry, int index) {
     }
     // else, linear probe
     int counter = 0;
+    int originalIndex = index;
     while(counter < this->size) {
         index = index % this->size;
         // if this slot is not occupied
@@ -82,7 +84,7 @@ int HashTable::probe(Entry inputEntry, int index) {
             return index;
         }
         counter++;
-        index++;
+        index = originalIndex + static_cast<int>(pow(counter, this->probeExpo));
         this->collisions++;
     }
     return index;
@@ -162,13 +164,19 @@ void HashTable::resizeTable() {
  * @return void This function does not return a value.
  */
 int HashTable::insert(Entry& input) {
-    // if the load factor is large, resize the table, then proceed
+    // get hash function result
+    int result = hashFunction(input.name);
+
+    // key already exists, return -1 and DO NOT resize table
+    if(table[result].validBit && table[result].name == input.name) {
+        return -1;
+    }
+
+    // else, if the load factor is large, resize the table, then proceed
     if(getLoadFactor() > 0.70) {
         resizeTable();
     }
 
-    // get hash function result
-    int result = hashFunction(input.name);
     int index;
     // if the index is valid to insert at that slot
     if (!table[result].validBit) {
@@ -176,15 +184,9 @@ int HashTable::insert(Entry& input) {
         this->count++;
         index = result;
     }
-    // else implies there is a collision
-    // if the collision is NOT a duplicate key
-    else if (table[result].name != input.name) {
-        index = probe(input, result);
-    }
-    // else there was a collision and the key is not unqiue
-    // count collision ??????????????????????????//
+    // else implies there is a collision, so probe
     else {
-        index = -1;
+        index = probe(input, result);
     }
     return index;
 }
@@ -324,7 +326,7 @@ void HashTable::loadEntries(string inputFileName) {
         return;
     }
 
-    // file is valid and non empty
+    // file is valid and non-empty
     Entry inputEntry;
     inputEntry.validBit = true;
 
@@ -354,9 +356,19 @@ void HashTable::loadEntries(string inputFileName) {
  */
 void HashTable::getInfo() const {
     cout << "------------ info ------------" << endl;
-    cout << "Num of elements: " << this->count << endl;
-    cout << "Table size: " << this->size << endl;
-    cout << "Load Factor: " << setprecision(3) << getLoadFactor() << endl;
+    cout << "Num of Elements: " << this->count << endl;
+    cout << "Table Size: " << this->size << endl;
+    cout << "Load Factor: " << setprecision(3) << static_cast<double>(this->count) / this->size << endl;
     cout << "Num of Collisions: " << this->collisions << endl;
-    cout << "Average Insert: " << setprecision(2) << (double)this->collisions / this->count << endl;
+    cout << "Average Collisions Before Insert: " << setprecision(2) << (double)this->collisions / this->count << endl;
+}
+
+void HashTable::changeProbe() {
+    cout << "----------------" << endl;
+    cout << "1 - linear probing" << endl;
+    cout << "2 - quadratic probing" << endl;
+    cout << "k - i^k probing" << endl;
+    cout << "----------------" << endl;
+
+    this->probeExpo = getIntInput();
 }
