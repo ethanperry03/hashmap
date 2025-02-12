@@ -10,4 +10,6 @@ int findNextPrime(int);
 // test if input number is prime
 bool isPrime(int);
 
+int getIntInput();
+
 #endif //P1_HELPER_H

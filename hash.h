@@ -28,6 +28,8 @@ private:
     // number of collisions while inserting
     int collisions;
 
+    int probeExpo;
+
     // hash function using Knuth's constant
     int hashFunction(string);
     // linear probing method
@@ -59,6 +61,8 @@ public:
     void loadEntries(string);
     // display information about the table
     void getInfo() const;
+    // change the probing method
+    void changeProbe();
     // is full and is empty in line defintion
     bool isEmpty () const {return count == 0;}
     bool isFull () const {return count == size;}

@@ -12,6 +12,7 @@ using namespace std;
 HashTable::HashTable(int tableSize) {
     count = 0;
     collisions = 0;
+    probeExpo = 1;
     size = findNextPrime(tableSize);
     table.resize(size);
 
@@ -73,6 +74,7 @@ int HashTable::probe(Entry inputEntry, int index) {
     }
     // else, linear probe
     int counter = 0;
+    int originalIndex = index;
     while(counter < this->size) {
         index = index % this->size;
         // if this slot is not occupied
@@ -82,7 +84,7 @@ int HashTable::probe(Entry inputEntry, int index) {
             return index;
         }
         counter++;
-        index++;
+        index = originalIndex + static_cast<int>(pow(counter, this->probeExpo));
         this->collisions++;
     }
     return index;
@@ -323,7 +325,7 @@ void HashTable::loadEntries(string inputFileName) {
         return;
     }
 
-    // file is valid and non empty
+    // file is valid and non-empty
     Entry inputEntry;
     inputEntry.validBit = true;
 
@@ -355,6 +357,16 @@ void HashTable::getInfo() const {
     cout << "------------ info ------------" << endl;
     cout << "Num of elements: " << this->count << endl;
     cout << "Table size: " << this->size << endl;
-    cout << "Load Factor: " << setprecision(3) << getLoadFactor() << endl;
+    cout << "Load Factor: " << setprecision(3) << static_cast<double>(this->count) / this->size << endl;
     cout << "Num of Collisions: " << this->collisions << endl;
+}
+
+void HashTable::changeProbe() {
+    cout << "----------------" << endl;
+    cout << "1 - linear probing" << endl;
+    cout << "2 - quadratic probing" << endl;
+    cout << "k - i^k probing" << endl;
+    cout << "----------------" << endl;
+
+    this->probeExpo = getIntInput();
 }

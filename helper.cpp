@@ -1,3 +1,6 @@
+
+#include <iostream>
+#include <limits>
 #include "helper.h"
 using namespace std;
 
@@ -61,4 +64,21 @@ int findNextPrime(int input) {
     }
     // return the next biggest prime
     return input + i;
+}
+
+int getIntInput() {
+    int input;
+    while (!(cin >> input)) {
+        // Clear the error state of cin
+        cin.clear();
+        // Ignore the rest of the input line
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input. Please enter a number: ";
+    }
+    // if input was negative, restart prompt for an int
+    if (input < 0) {
+        cout << "Please enter a positive integer: ";
+        input = getIntInput();
+    }
+    return input;
 }
