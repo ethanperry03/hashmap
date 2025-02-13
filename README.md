@@ -1,7 +1,15 @@
 # Hash Table Implementation using Open Addressing in C++
 
-## Author 
-Ethan Perry
+## Ethan Perry
+
+## Files
+- **Main.cpp:** Implementation and usage of the hash table class and menu options
+- **hash.cpp:** Implementation of HashTable class methods.
+- **hash.h:** Declaration of HashTable class.
+- **helper.cpp:** Functions that help create and maintain hashtable.
+- **helper.h:** Declaration of helper functions.
+- **menu.cpp:** Implementation of menu based helper functions.
+- **menu.h:** Declaration of menu helper functions.
 
 ## Description
 This project involves implementing a hash table using open addressing with linear probing in C++. The goal is to achieve 
