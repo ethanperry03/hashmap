@@ -1,3 +1,10 @@
+/** Assignment 1: Hashmap
+ * Ethan Perry
+ * Sun. Feb 16th, 2025
+ * Hashtable implementation using open addressing in c++
+ * I have abided by the Wheaton College Honor code in this work. -Ethan Perry
+ */
+
 #include <iostream>
 #include "menu.h"
 #include "hash.h"

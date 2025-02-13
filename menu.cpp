@@ -46,7 +46,7 @@ string getInputStr() {
  * @param input Character representing the user's choice of action.
  * @return void This function does not return a value.
  */
-void optionHub(HashTable& table, const char input) {
+void optionHub(HashTable& table, char input) {
     if (input == 'i') {
         table.insertOneKey();
     }
